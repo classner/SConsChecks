@@ -49,19 +49,32 @@ _checks = GetLibChecks(_libs)
 # You can automatically add all command line options to configure the
 # libraries as follows:
 def setupOptions():
-    if platform.system() == 'Windows':
-        default_prefix = r'C:\Libraries'
-    else:
-        default_prefix = "/usr/local"
-    AddOption("--prefix-dir", dest="prefix", type="string", nargs=1, action="store",
-              metavar="DIR", default=default_prefix, help="installation prefix")
     # ...
-    # Add library configuration options.
+    # Add library configuration command line options.
     AddLibOptions(AddOption, _libs)
 ```
 
 See the attached sample project for details.
 
+
+## Default library configuration
+
+The following defaults are used to configure library xyz:
+
+- Environment variable XYZ_ROOT (command-line --xyz-dir):
+  the libraries root folder. If specified, the following include and 
+  lib directories are used relative to the root directory.
+
+- Environment variable XYZ_INCLUDE_DIR (command-line --xyz-inc-dir):
+  the libraries header include folder.
+
+- Environment variable XYZ_LIB_DIR (command-line --xyz-lib-dir):
+  the libraries linking folder.
+
+## Contributing
+
+You are very welcome to extend the list of available checks. Please fork the
+repo and send me a pull request.
 
 ## License and credits
 

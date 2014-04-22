@@ -32,7 +32,7 @@ _boost_option_dict = {'--boost-dir':
                       'action':"store",
                       'metavar':"DIR",
                       'help':"location of Boost header files",
-                      'default':os.environ.get("BOOST_ROOT")},
+                      'default':os.environ.get("BOOST_INCLUDE_DIR")},
                       '--boost-lib-dir':
                       {'dest':"boost_lib",
                       'type':"string",
@@ -56,7 +56,7 @@ _boost_np_option_dict = { '--boost-np-dir':
                           'action':"store",
                           'metavar':"DIR",
                           'help':"location of Boost numpy header files",
-                          'default':os.environ.get("BOOST_ROOT")},
+                          'default':os.environ.get("BOOST_INCLUDE_DIR")},
                           '--boost-np-lib-dir':
                           {'dest':"boost_np_lib",
                           'type':"string",
