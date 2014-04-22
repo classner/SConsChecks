@@ -10,5 +10,4 @@ file_list = Glob('*.cpp')
 headers = Glob('*.h')
 # The library.
 lib_file = lib_env.SharedLibrary('yourlibrary', file_list)
-# Copy it to the pyfertilized directory.
 Return("lib_file", "headers")

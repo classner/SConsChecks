@@ -129,7 +129,7 @@ int main()
         sys.stdout.flush()
         subprocess.call('which python',shell=True)
         print '  is the same as the one used by SCons:'
-        print '  ',sys.executable
+        print '  ', sys.executable
         print '   If not, then you probably need to reinstall numpy with %s.' % sys.executable
         print '   Alternatively, you can reinstall SCons with your preferred python.'
         print '2) Check that if you open a python session from the command line,'

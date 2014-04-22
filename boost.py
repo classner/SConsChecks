@@ -12,6 +12,7 @@
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
 from _tools import _checkLibs, _setupPaths
+from python import CheckPython
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 import os
@@ -108,7 +109,7 @@ int main()
     context.Result(1)
     return True
 _check_dict['boost.python'] = {'options': _boost_option_dict,
-                                'checks': [CheckBoostPython]}
+                                'checks': [CheckPython, CheckBoostPython]}
 
 def CheckBoostNumpy(context):
     bp_source_file = r"""

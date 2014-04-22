@@ -11,6 +11,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
+from collections import OrderedDict
+
 from boost import CheckBoostNumpy, \
                   CheckBoostPP, \
                   CheckBoostPython, \
@@ -29,6 +31,14 @@ from opencv import CheckOpenCV,\
 _check_dict = dict(_check_dict, **_opencv_check_dict)
 
 def AddLibOptions(add_method, lib_names):
+  r"""
+  Provide the `AddOption` method for your enviromnent, and all command line
+  options for the provided `lib_names` will be created automatically.
+
+  Example:
+  >>> AddLibOptions(AddOption, ['boost.test'])
+
+  """
   options = {}
   for lib_name in lib_names:
     if not lib_name in _check_dict.keys():
@@ -40,7 +50,15 @@ def AddLibOptions(add_method, lib_names):
     add_method(option, **options[option])
 
 def GetLibChecks(lib_names):
-  checks = {}
+  r"""
+  Returns an OrderedDict with names and methods for all setup checks for the
+  provided library names.
+
+  Example:
+  >>> GetLibChecks(['boost.test'])
+  {'CheckBoostTest' : CheckBoostTest}
+  """
+  checks = OrderedDict()
   for lib_name in lib_names:
     if not lib_name in _check_dict.keys():
       raise Exception("Unknown library: %s." % (lib_name))
