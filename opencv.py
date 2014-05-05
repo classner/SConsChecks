@@ -36,7 +36,7 @@ _opencv_option_dict = {'--opencv-dir':
                         'metavar':"DIR",
                         'help':"location of OpenCV header files",
                         'default':os.environ.get("OPENCV_INCLUDE_DIR")},
-                        '--boost-lib-dir':
+                        '--opencv-lib-dir':
                         {'dest':"opencv_lib",
                         'type':"string",
                         'nargs':1,
