@@ -18,7 +18,8 @@ implemented for:
 - 'boost.thread',
 - 'python',
 - 'numpy',
-- 'opencv'.
+- 'opencv',
+- 'eigen'.
 
 You can either:
 
@@ -42,7 +43,8 @@ _libs = ['boost.numpy',
          'boost.thread',
          'python',
          'numpy',
-         'opencv']
+         'opencv',
+         'eigen']
 # and get a check (name, method) dict.
 _checks = GetLibChecks(_libs)
 
