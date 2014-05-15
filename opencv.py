@@ -5,8 +5,6 @@
 # but have been altered and substantially extended.
 #
 # Copyright Christoph Lassner 2014.
-# For the python, numpy and boost python checks, _setupPaths and _checkLibs:
-# Copyright Jim Bosch 2010-2012.
 #
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)

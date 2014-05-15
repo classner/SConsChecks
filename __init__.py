@@ -30,6 +30,10 @@ from opencv import CheckOpenCV,\
                    _check_dict as _opencv_check_dict
 _check_dict = dict(_check_dict, **_opencv_check_dict)
 
+from eigen import CheckEigen, \
+                  _check_dict as _eigen_check_dict
+_check_dict = dict(_check_dict, **_eigen_check_dict)
+
 def AddLibOptions(add_method, lib_names):
   r"""
   Provide the `AddOption` method for your enviromnent, and all command line
@@ -61,7 +65,7 @@ def GetLibChecks(lib_names):
   checks = OrderedDict()
   for lib_name in lib_names:
     if not lib_name in _check_dict.keys():
-      raise Exception("Unknown library: %s." % (lib_name))
+      raise Exception("Unknown library: %s" % (lib_name))
     for check in _check_dict[lib_name]['checks']:
       if not check.__name__ in checks.keys():
         checks[check.__name__] = check
