@@ -66,6 +66,13 @@ _boost_np_option_dict = { '--boost-np-dir':
                           'metavar':"DIR",
                           'help':"location of Boost numpy libraries",
                           'default':os.environ.get("BOOST_LIB_DIR")}}
+_boost_python_option_dict = { '--boost-python-lib':
+                              {'dest':"boost_python_lib",
+                              'type':"string",
+                              'nargs':1,
+                              'action':"store",
+                              'default':"boost_python",
+                              'help':"boost python library filename"}}
 
 def CheckBoostPython(context):
     bp_source_file = r"""
@@ -88,14 +95,15 @@ int main()
         include = context.env.GetOption("boost_include"),
         lib = context.env.GetOption("boost_lib")
         )
+    boost_python_lib = context.env.GetOption('boost_python_lib')
     if context.env['CC'] == 'cl':
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], bp_source_file))
     else:
         result = (
             context.checkLibs([''], bp_source_file) or
-            context.checkLibs(['boost_python'], bp_source_file) or
-            context.checkLibs(['boost_python-mt'], bp_source_file)
+            context.checkLibs([boost_python_lib], bp_source_file) or
+            context.checkLibs([boost_python_lib+'-mt'], bp_source_file)
             )
     if not result:
         context.Result(0)
@@ -108,7 +116,7 @@ int main()
         return False
     context.Result(1)
     return True
-_check_dict['boost.python'] = {'options': _boost_option_dict,
+_check_dict['boost.python'] = {'options': dict(_boost_option_dict, **_boost_python_option_dict),
                                 'checks': [CheckPython, CheckBoostPython]}
 
 def CheckBoostNumpy(context):
