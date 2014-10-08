@@ -43,9 +43,16 @@ int main()
 }
 """
     context.Message('Check building with Eigen... ')
+    include_dir = context.env.GetOption("eigen_prefix")
+    try:
+      ex_include_dir = context.env.GetOption("eigen_include")
+      if not ex_include_dir is None:
+        include_dir = ex_include_dir
+    except:
+      pass
     _setupPaths(context.env,
                 prefix = None,
-                include = context.env.GetOption("eigen_prefix"),
+                include = include_dir,
                 lib = None
                 )
     result = (context.checkLibs([], eigen_source_file))

@@ -1,6 +1,6 @@
 # -*- python -*-
 #
-# These SCons tests are based on the ones of boost numpy 
+# These SCons tests are based on the ones of boost numpy
 # (https://github.com/ndarray/Boost.NumPy/blob/master/SConscript),
 # but have been altered and substantially extended.
 #
@@ -229,6 +229,7 @@ BOOST_AUTO_TEST_CASE( my_test )
         lib = context.env.GetOption("boost_lib")
         )
     if context.env['CC'] == 'cl':
+        context.env.AppendUnique(LINKFLAGS='/SUBSYSTEM:CONSOLE')
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
     else:
@@ -249,7 +250,7 @@ BOOST_AUTO_TEST_CASE( my_test )
     return True
 _check_dict['boost.test'] = {'options': _boost_option_dict,
                              'checks': [CheckBoostTest]}
-  
+
 def CheckBoostThread(context):
     boost_source_file = r"""
 // Get diagnostics in the log.
@@ -300,7 +301,7 @@ _check_dict['boost.thread'] = {'options': _boost_option_dict,
 
 def CheckBoostPP(context):
     boost_source_file = r"""
-#include <boost/preprocessor/cat.hpp> 
+#include <boost/preprocessor/cat.hpp>
 
 #define STATIC_ASSERT(EXPR)\
   enum\

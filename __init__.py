@@ -1,6 +1,6 @@
 # -*- python -*-
 #
-# These SCons tests are based on the ones of boost numpy 
+# These SCons tests are based on the ones of boost numpy
 # (https://github.com/ndarray/Boost.NumPy/blob/master/SConscript),
 # but have been altered and substantially extended.
 #
@@ -33,6 +33,14 @@ _check_dict = dict(_check_dict, **_opencv_check_dict)
 from eigen import CheckEigen, \
                   _check_dict as _eigen_check_dict
 _check_dict = dict(_check_dict, **_eigen_check_dict)
+
+from swig import CheckSwig, \
+                 _check_dict as _swig_check_dict
+_check_dict = dict(_check_dict, **_swig_check_dict)
+
+from fftw import CheckFFTW, \
+                 _check_dict as _fftw_check_dict
+_check_dict = dict(_check_dict, **_fftw_check_dict)
 
 def AddLibOptions(add_method, lib_names):
   r"""

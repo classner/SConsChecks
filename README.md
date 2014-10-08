@@ -19,7 +19,9 @@ implemented for:
 - 'python',
 - 'numpy',
 - 'opencv',
-- 'eigen'.
+- 'eigen',
+- 'fftw',
+- 'swig'.
 
 You can either:
 
