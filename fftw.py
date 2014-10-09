@@ -117,7 +117,12 @@ int main() {
         include = fftw_ex_inc,
         lib = fftw_ex_lib
         )
-    fftw_libname = 'libfftw%d%s-%d' % (fftw_major, fftw_flavor, fftw_minor)
+    if context.env['CC'] == 'gcc':
+        context.env.AppendUnique(CPPFLAGS=['-std=c++0x'])
+    if os.name == 'nt':
+        fftw_libname = 'libfftw%d%s-%d' % (fftw_major, fftw_flavor, fftw_minor)
+    else:
+        fftw_libname = 'libfftw%d%s' % (fftw_major, fftw_flavor)
     result = context.checkLibs([fftw_libname], fftw_source_file)
     if not result:
         context.Result(0)
