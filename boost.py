@@ -75,6 +75,20 @@ _boost_python_option_dict = { '--boost-python-lib':
                               'default':"boost_python",
                               'help':"boost python library filename"}}
 
+def _set_boost_path(context):
+    boostpre = context.env.GetOption("boost_prefix")
+    boostinc = context.env.GetOption("boost_include")
+    boostlib = context.env.GetOption("boost_lib")
+    if not boostpre is None and boostlib is None:
+        boostlib = os.path.join(os.environ.get("BOOST_DIR"), 'stage', 'lib')
+    if not boostpre is None and boostinc is None:
+        boostinc = os.environ.get("BOOST_DIR")
+    _setupPaths(context.env,
+        prefix = boostpre,
+        include = boostinc,
+        lib = boostlib
+        )
+
 def CheckBoostPython(context):
     bp_source_file = r"""
 // Get diagnostics in the log.
@@ -91,11 +105,7 @@ int main()
 }
 """
     context.Message('Check building against Boost.Python... ')
-    _setupPaths(context.env,
-        prefix = context.env.GetOption("boost_prefix"),
-        include = context.env.GetOption("boost_include"),
-        lib = context.env.GetOption("boost_lib")
-        )
+    _set_boost_path(context)
     boost_python_lib = context.env.GetOption('boost_python_lib')
     if context.env['CC'] == 'cl':
         # Use msvc's autolinking support.
@@ -185,11 +195,7 @@ int main()
 }
 """
     context.Message('Check building against Boost.Serialization... ')
-    _setupPaths(context.env,
-        prefix = context.env.GetOption("boost_prefix"),
-        include = context.env.GetOption("boost_include"),
-        lib = context.env.GetOption("boost_lib")
-        )
+    _set_boost_path(context)
     if context.env['CC'] == 'cl':
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
@@ -215,6 +221,8 @@ _check_dict['boost.serialization'] = {'options': _boost_option_dict,
 
 def CheckBoostTest(context):
     boost_source_file = r"""
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE "dummy module"
 #include <boost/test/unit_test.hpp>
 
@@ -224,11 +232,7 @@ BOOST_AUTO_TEST_CASE( my_test )
 }
 """
     context.Message('Check building against Boost.Test... ')
-    _setupPaths(context.env,
-        prefix = context.env.GetOption("boost_prefix"),
-        include = context.env.GetOption("boost_include"),
-        lib = context.env.GetOption("boost_lib")
-        )
+    _set_boost_path(context)
     if context.env['CC'] == 'cl':
         context.env.AppendUnique(LINKFLAGS='/SUBSYSTEM:CONSOLE')
         # Use msvc's autolinking support.
@@ -236,7 +240,7 @@ BOOST_AUTO_TEST_CASE( my_test )
     else:
         result = (
             context.checkLibs([''], boost_source_file) or
-            context.checkLibs(['boost_test'], boost_source_file)
+            context.checkLibs(['boost_unit_test_framework'], boost_source_file)
             )
     if not result:
         context.Result(0)
@@ -272,11 +276,7 @@ int main()
 }
 """
     context.Message('Check building against Boost.Thread... ')
-    _setupPaths(context.env,
-        prefix = context.env.GetOption("boost_prefix"),
-        include = context.env.GetOption("boost_include"),
-        lib = context.env.GetOption("boost_lib")
-        )
+    _set_boost_path(context)
     if context.env['CC'] == 'cl':
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
@@ -320,11 +320,7 @@ int main()
 }
 """
     context.Message('Check building against Boost.Preprocessor... ')
-    _setupPaths(context.env,
-        prefix = context.env.GetOption("boost_prefix"),
-        include = context.env.GetOption("boost_include"),
-        lib = context.env.GetOption("boost_lib")
-        )
+    _set_boost_path(context)
     result = (context.checkLibs([''], boost_source_file))
     if not result:
         context.Result(0)
