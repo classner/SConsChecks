@@ -3,7 +3,7 @@
 This collection of library checks is provided as a convenience helper. It 
 offers the possibility to perform a platform independent check for the library
 (including compilation and execution) and automatically adds command line
-configuration options for it.
+configuration options for it. __It works with Python 2 and 3__.
 
 ## Usage
 

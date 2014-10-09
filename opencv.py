@@ -9,11 +9,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
-
+from __future__ import print_function
 import platform
 import os
 
-from _tools import _checkLibs, _setupPaths
+from ._tools import _checkLibs, _setupPaths
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 
@@ -81,12 +81,12 @@ int main()
                                      'opencv_core' + libsuffix], opencv_source_file))
     if not result:
         context.Result(0)
-        print "Cannot build against OpenCV."
+        print("Cannot build against OpenCV.")
         return False
     result, output = context.TryRun(opencv_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against OpenCV."
+        print("Cannot run program built against OpenCV.")
         return False
     context.Result(1)
     return True

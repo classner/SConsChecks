@@ -5,11 +5,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
-
+from __future__ import print_function
 import sys
 import os
 
-from _tools import _checkLibs, _setupPaths
+from ._tools import _checkLibs, _setupPaths
 
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
@@ -58,12 +58,12 @@ int main()
     result = (context.checkLibs([], eigen_source_file))
     if not result:
         context.Result(0)
-        print "Cannot build with Eigen."
+        print("Cannot build with Eigen.")
         return False
     result, output = context.TryRun(eigen_source_file,'.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built with Eigen."
+        print("Cannot run program built with Eigen.")
         return False
     context.Result(1)
     return True

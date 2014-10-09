@@ -4,9 +4,9 @@
 #
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
-
-from _tools import _checkLibs, _setupPaths
-from python import CheckPython
+from __future__ import print_function
+from ._tools import _checkLibs, _setupPaths
+from .python import CheckPython
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 import os
@@ -121,12 +121,12 @@ int main() {
     result = context.checkLibs([fftw_libname], fftw_source_file)
     if not result:
         context.Result(0)
-        print "Cannot build against fftw."
+        print("Cannot build against fftw.")
         return False
     result, output = context.TryRun(fftw_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against fftw."
+        print("Cannot run program built against fftw.")
         return False
     context.Result(1)
     return True

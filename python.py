@@ -11,13 +11,13 @@
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
-
+from __future__ import print_function
 import os
 import sys
 import platform
 import subprocess
 
-from _tools import _checkLibs, _setupPaths
+from ._tools import _checkLibs, _setupPaths
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 
@@ -40,7 +40,7 @@ int main()
         import distutils.sysconfig
     except ImportError:
         context.Result(0)
-        print 'Failed to import distutils.sysconfig.'
+        print('Failed to import distutils.sysconfig.')
         return False
     context.env.AppendUnique(CPPPATH=[distutils.sysconfig.get_python_inc()])
     if platform.system() == 'Windows':
@@ -72,16 +72,16 @@ int main()
             if d2 == "Python.framework":
                 if not "Python" in os.listdir(os.path.join(frameworkDir, d2)):
                     context.Result(0)
-                    print (
+                    print((
                         "Expected to find Python in framework directory %s, but it isn't there"
-                        % frameworkDir)
+                        % frameworkDir))
                     return False
                 break
         context.env.AppendUnique(LINKFLAGS="-F%s" % frameworkDir)
         result, output = context.TryRun(python_source_file,'.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built with Python."
+        print("Cannot run program built with Python.")
         return False
     if context.env["PLATFORM"] == "darwin":
         context.env["LDMODULESUFFIX"] = ".so"
@@ -122,29 +122,29 @@ int main()
         import numpy
     except ImportError:
         context.Result(0)
-        print 'Failed to import numpy.'
-        print 'Things to try:'
-        print '1) Check that the command line python (with which you probably installed numpy):'
-        print '   ',
+        print('Failed to import numpy.')
+        print('Things to try:')
+        print('1) Check that the command line python (with which you probably installed numpy):')
+        print('   ', end=' ')
         sys.stdout.flush()
         subprocess.call('which python',shell=True)
-        print '  is the same as the one used by SCons:'
-        print '  ', sys.executable
-        print '   If not, then you probably need to reinstall numpy with %s.' % sys.executable
-        print '   Alternatively, you can reinstall SCons with your preferred python.'
-        print '2) Check that if you open a python session from the command line,'
-        print '   import numpy is successful there.'
+        print('  is the same as the one used by SCons:')
+        print('  ', sys.executable)
+        print('   If not, then you probably need to reinstall numpy with %s.' % sys.executable)
+        print('   Alternatively, you can reinstall SCons with your preferred python.')
+        print('2) Check that if you open a python session from the command line,')
+        print('   import numpy is successful there.')
         return False
     context.env.Append(CPPPATH=numpy.get_include())
     result = context.checkLibs([''],numpy_source_file)
     if not result:
         context.Result(0)
-        print "Cannot build against NumPy."
+        print("Cannot build against NumPy.")
         return False
     result, output = context.TryRun(numpy_source_file,'.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built with NumPy."
+        print("Cannot run program built with NumPy.")
         return False
     context.Result(1)
     return True

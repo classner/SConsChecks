@@ -11,8 +11,9 @@
 # Distributed under the Boost Software License, Version 1.0.
 #    (See http://www.boost.org/LICENSE_1_0.txt)
 
-from _tools import _checkLibs, _setupPaths
-from python import CheckPython
+from __future__ import print_function
+from ._tools import _checkLibs, _setupPaths
+from .python import CheckPython
 from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 import os
@@ -107,12 +108,12 @@ int main()
             )
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Python."
+        print("Cannot build against Boost.Python.")
         return False
     result, output = context.TryRun(bp_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Python."
+        print("Cannot run program built against Boost.Python.")
         return False
     context.Result(1)
     return True
@@ -150,12 +151,12 @@ int main()
       result = (context.checkLibs(['boost_numpy'], bp_source_file))
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Numpy."
+        print("Cannot build against Boost.Numpy.")
         return False
     result, output = context.TryRun(bp_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Numpy."
+        print("Cannot run program built against Boost.Numpy.")
         return False
     context.Result(1)
     return True
@@ -200,12 +201,12 @@ int main()
             )
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Serialization."
+        print("Cannot build against Boost.Serialization.")
         return False
     result, output = context.TryRun(boost_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Serialization."
+        print("Cannot run program built against Boost.Serialization.")
         return False
     context.Result(1)
     return True
@@ -239,12 +240,12 @@ BOOST_AUTO_TEST_CASE( my_test )
             )
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Test."
+        print("Cannot build against Boost.Test.")
         return False
     result, output = context.TryRun(boost_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Test."
+        print("Cannot run program built against Boost.Test.")
         return False
     context.Result(1)
     return True
@@ -287,12 +288,12 @@ int main()
             )
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Thread."
+        print("Cannot build against Boost.Thread.")
         return False
     result, output = context.TryRun(boost_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Thread."
+        print("Cannot run program built against Boost.Thread.")
         return False
     context.Result(1)
     return True
@@ -327,12 +328,12 @@ int main()
     result = (context.checkLibs([''], boost_source_file))
     if not result:
         context.Result(0)
-        print "Cannot build against Boost.Preprocessor."
+        print("Cannot build against Boost.Preprocessor.")
         return False
     result, output = context.TryRun(boost_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print "Cannot run program built against Boost.Preprocessor."
+        print("Cannot run program built against Boost.Preprocessor.")
         return False
     context.Result(1)
     return True

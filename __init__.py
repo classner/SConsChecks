@@ -13,33 +13,33 @@
 
 from collections import OrderedDict
 
-from boost import CheckBoostNumpy, \
-                  CheckBoostPP, \
-                  CheckBoostPython, \
-                  CheckBoostSerialization, \
-                  CheckBoostTest, \
-                  CheckBoostThread, \
-                  _check_dict
+from .boost import CheckBoostNumpy, \
+                   CheckBoostPP, \
+                   CheckBoostPython, \
+                   CheckBoostSerialization, \
+                   CheckBoostTest, \
+                   CheckBoostThread, \
+                   _check_dict
 
-from python import CheckPython, \
-                   CheckNumPy, \
-                   _check_dict as _python_check_dict
+from .python import CheckPython, \
+                    CheckNumPy, \
+                    _check_dict as _python_check_dict
 _check_dict = dict(_check_dict, **_python_check_dict)
 
-from opencv import CheckOpenCV,\
-                   _check_dict as _opencv_check_dict
+from .opencv import CheckOpenCV,\
+                    _check_dict as _opencv_check_dict
 _check_dict = dict(_check_dict, **_opencv_check_dict)
 
-from eigen import CheckEigen, \
-                  _check_dict as _eigen_check_dict
+from .eigen import CheckEigen, \
+                   _check_dict as _eigen_check_dict
 _check_dict = dict(_check_dict, **_eigen_check_dict)
 
-from swig import CheckSwig, \
-                 _check_dict as _swig_check_dict
+from .swig import CheckSwig, \
+                  _check_dict as _swig_check_dict
 _check_dict = dict(_check_dict, **_swig_check_dict)
 
-from fftw import CheckFFTW, \
-                 _check_dict as _fftw_check_dict
+from .fftw import CheckFFTW, \
+                  _check_dict as _fftw_check_dict
 _check_dict = dict(_check_dict, **_fftw_check_dict)
 
 def AddLibOptions(add_method, lib_names):
@@ -53,12 +53,12 @@ def AddLibOptions(add_method, lib_names):
   """
   options = {}
   for lib_name in lib_names:
-    if not lib_name in _check_dict.keys():
+    if not lib_name in list(_check_dict.keys()):
       raise Exception("Unknown library: %s." % (lib_name))
-    for option, keywords in _check_dict[lib_name]['options'].items():
-      if not option in options.keys():
+    for option, keywords in list(_check_dict[lib_name]['options'].items()):
+      if not option in list(options.keys()):
         options[option] = keywords
-  for option in options.keys():
+  for option in list(options.keys()):
     add_method(option, **options[option])
 
 def GetLibChecks(lib_names):
@@ -72,9 +72,9 @@ def GetLibChecks(lib_names):
   """
   checks = OrderedDict()
   for lib_name in lib_names:
-    if not lib_name in _check_dict.keys():
+    if not lib_name in list(_check_dict.keys()):
       raise Exception("Unknown library: %s" % (lib_name))
     for check in _check_dict[lib_name]['checks']:
-      if not check.__name__ in checks.keys():
+      if not check.__name__ in list(checks.keys()):
         checks[check.__name__] = check
   return checks
