@@ -57,7 +57,7 @@ def CheckOpenCV(context):
 
 int main()
 {
-  auto test = cv::Mat::eye(5, 5, CV_64F);
+  cv::Mat test = cv::Mat::eye(5, 5, CV_64F);
   return 0;
 }
 """
