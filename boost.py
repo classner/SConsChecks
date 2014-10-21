@@ -72,6 +72,7 @@ _boost_python_option_dict = { '--boost-python-lib':
                               'type':"string",
                               'nargs':1,
                               'action':"store",
+                              'metavar':"FILENAME",
                               'default':"boost_python",
                               'help':"boost python library filename"}}
 

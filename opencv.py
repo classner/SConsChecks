@@ -47,7 +47,7 @@ _opencv_option_dict = {'--opencv-dir':
                         'type':"string",
                         'nargs':1,
                         'action':"store",
-                        'metavar':"DIR",
+                        'metavar':"VERSION",
                         'help':"opencv version, without dots, e.g. 248",
                         'default':os.environ.get("OPENCV_VERSION")}}
 
