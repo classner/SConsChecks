@@ -283,8 +283,8 @@ int main()
     else:
         result = (
             context.checkLibs([''], boost_source_file) or
-            context.checkLibs(['boost_thread'], boost_source_file) or
-            context.checkLibs(['boost_thread-mt'], boost_source_file)
+            context.checkLibs(['boost_thread', 'boost_system'], boost_source_file) or
+            context.checkLibs(['boost_thread-mt', 'boost_system-mt'], boost_source_file)
             )
     if not result:
         context.Result(0)
