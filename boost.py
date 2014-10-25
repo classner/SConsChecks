@@ -81,9 +81,9 @@ def _set_boost_path(context):
     boostinc = context.env.GetOption("boost_include")
     boostlib = context.env.GetOption("boost_lib")
     if not boostpre is None and boostlib is None:
-        boostlib = os.path.join(os.environ.get("BOOST_DIR"), 'stage', 'lib')
+        boostlib = os.path.join(boostpre, 'stage', 'lib')
     if not boostpre is None and boostinc is None:
-        boostinc = os.environ.get("BOOST_DIR")
+        boostinc = boostpre
     _setupPaths(context.env,
         prefix = boostpre,
         include = boostinc,
