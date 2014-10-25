@@ -1,6 +1,6 @@
 # -*- python -*-
 #
-# These SCons tests are based on the ones of boost numpy 
+# These SCons tests are based on the ones of boost numpy
 # (https://github.com/ndarray/Boost.NumPy/blob/master/SConscript),
 # but have been altered and substantially extended.
 #
@@ -79,6 +79,11 @@ int main()
         result = (context.checkLibs(['opencv_imgproc' + libsuffix,
                                      'opencv_highgui' + libsuffix,
                                      'opencv_core' + libsuffix], opencv_source_file))
+        if not result:
+            # It not common on Linux to have the 'd' suffix for debugging.
+            result = (context.checkLibs(['opencv_imgproc',
+                                         'opencv_highgui',
+                                         'opencv_core'], opencv_source_file))
     if not result:
         context.Result(0)
         print("Cannot build against OpenCV.")
