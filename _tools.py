@@ -24,7 +24,6 @@ def _setupPaths(env,
             include = os.path.join(prefix, include_add_dir)
         if lib is None:
             lib = os.path.join(prefix, lib_add_dir)
-    print prefix, include, lib
     if include:
         env.PrependUnique(CPPPATH=[include])
     if lib:
