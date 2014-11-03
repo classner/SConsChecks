@@ -13,12 +13,18 @@
 
 import os
 
-def _setupPaths(env, prefix, include, lib):
+def _setupPaths(env,
+                prefix,
+                include,
+                lib,
+                include_add_dir='include',
+                lib_add_dir='lib'):
     if prefix is not None:
         if include is None:
-            include = os.path.join(prefix, "include")
+            include = os.path.join(prefix, include_add_dir)
         if lib is None:
-            lib = os.path.join(prefix, "lib")
+            lib = os.path.join(prefix, lib_add_dir)
+    print prefix, include, lib
     if include:
         env.PrependUnique(CPPPATH=[include])
     if lib:

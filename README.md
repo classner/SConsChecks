@@ -21,7 +21,8 @@ implemented for:
 - 'opencv',
 - 'eigen',
 - 'fftw',
-- 'swig'.
+- 'swig',
+- 'matlab'.
 
 You can either:
 

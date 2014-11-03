@@ -42,6 +42,11 @@ from .fftw import CheckFFTW, \
                   _check_dict as _fftw_check_dict
 _check_dict = dict(_check_dict, **_fftw_check_dict)
 
+from .matlab import CheckMatlab, \
+                  _check_dict as _matlab_check_dict
+_check_dict = dict(_check_dict, **_matlab_check_dict)
+
+
 def AddLibOptions(add_method, lib_names):
   r"""
   Provide the `AddOption` method for your enviromnent, and all command line
