@@ -80,15 +80,20 @@ def _set_boost_path(context):
     boostpre = context.env.GetOption("boost_prefix")
     boostinc = context.env.GetOption("boost_include")
     boostlib = context.env.GetOption("boost_lib")
-    if not boostpre is None and boostlib is None:
-        boostlib = os.path.join(boostpre, 'stage', 'lib')
-    if not boostpre is None and boostinc is None:
-        boostinc = boostpre
-    _setupPaths(context.env,
-        prefix = boostpre,
-        include = boostinc,
-        lib = boostlib
-        )
+	if os.name == 'nt':
+		_setupPaths(context.env,
+			prefix = boostpre,
+			include = boostinc,
+			lib = boostlib,
+			include_add_dir='',
+			lib_add_dir=os.path.join('stage', 'lib')
+			)
+	else:
+		_setupPaths(context.env,
+			prefix = boostpre,
+			include = boostinc,
+			lib = boostlib
+			)
 
 def CheckBoostPython(context):
     bp_source_file = r"""
