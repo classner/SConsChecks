@@ -42,7 +42,23 @@ _boost_option_dict = {'--boost-dir':
                       'action':"store",
                       'metavar':"DIR",
                       'help':"location of Boost libraries",
-                      'default':os.environ.get("BOOST_LIB_DIR")}}
+                      'default':os.environ.get("BOOST_LIB_DIR")},
+                      '--boost-compiler-str':
+                      {'dest':"boost_comp",
+                      'type':"string",
+                      'nargs':1,
+                      'action':"store",
+                      'metavar':"STR",
+                      'help':"the compiler string used in the Windows Boost library names, e.g., vc110",
+                      'default':os.environ.get("BOOST_COMP_STR")},
+                      '--boost-version-str':
+                      {'dest':"boost_ver",
+                      'type':"string",
+                      'nargs':1,
+                      'action':"store",
+                      'metavar':"VER",
+                      'help':"the version string used in the Windows Boost library names, e.g., 1_54",
+                      'default':os.environ.get("BOOST_VER_STR")}}
 _boost_np_option_dict = { '--boost-np-dir':
                           {'dest':"boost_np_prefix",
                           'type':"string",
@@ -117,8 +133,16 @@ int main()
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], bp_source_file))
     else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs([boost_python_lib+'-%s-%s' % \
+			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs([boost_python_lib+'-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
-            context.checkLibs([''], bp_source_file) or
+            nt_try or
             context.checkLibs([boost_python_lib], bp_source_file) or
             context.checkLibs([boost_python_lib+'-mt'], bp_source_file)
             )
@@ -206,8 +230,16 @@ int main()
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
     else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_serialization-%s-%s' % \
+			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs(['boost_serialization-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
-            context.checkLibs([''], boost_source_file) or
+            nt_try or
             context.checkLibs(['boost_serialization'], boost_source_file) or
             context.checkLibs(['boost_serialization-mt'], boost_source_file)
             )
@@ -244,8 +276,14 @@ BOOST_AUTO_TEST_CASE( my_test )
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
     else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_unit_test_framework-%s-%s' % \
+			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
-            context.checkLibs([''], boost_source_file) or
+            nt_try or
             context.checkLibs(['boost_unit_test_framework'], boost_source_file)
             )
     if not result:
@@ -287,8 +325,20 @@ int main()
         # Use msvc's autolinking support.
         result = (context.checkLibs([''], boost_source_file))
     else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_thread-%s-%s' % \
+			           (GetOption('boost_comp'), GetOption('boost_ver')),
+                       'boost_system-%s-%s' %\
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs(['boost_thread-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver')),
+                       'boost_system-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
-            context.checkLibs([''], boost_source_file) or
+            nt_try or
             context.checkLibs(['boost_thread', 'boost_system'], boost_source_file) or
             context.checkLibs(['boost_thread-mt', 'boost_system-mt'], boost_source_file)
             )
