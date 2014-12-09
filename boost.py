@@ -143,6 +143,7 @@ int main()
                        (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
             nt_try or
+            context.checkLibs([''], bp_source_file) or
             context.checkLibs([boost_python_lib], bp_source_file) or
             context.checkLibs([boost_python_lib+'-mt'], bp_source_file)
             )
@@ -235,11 +236,12 @@ int main()
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs(['boost_serialization-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+			           (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file) or \
                      context.checkLibs(['boost_serialization-%s-mt-%s' % \
-                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
         result = (
             nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
             context.checkLibs(['boost_serialization'], boost_source_file) or
             context.checkLibs(['boost_serialization-mt'], boost_source_file)
             )
@@ -281,9 +283,10 @@ BOOST_AUTO_TEST_CASE( my_test )
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs(['boost_unit_test_framework-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
+			           (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
         result = (
             nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
             context.checkLibs(['boost_unit_test_framework'], boost_source_file)
             )
     if not result:
@@ -339,6 +342,7 @@ int main()
                        (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
             nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
             context.checkLibs(['boost_thread', 'boost_system'], boost_source_file) or
             context.checkLibs(['boost_thread-mt', 'boost_system-mt'], boost_source_file)
             )
