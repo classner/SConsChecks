@@ -19,6 +19,9 @@ from .boost import CheckBoostNumpy, \
                    CheckBoostSerialization, \
                    CheckBoostTest, \
                    CheckBoostThread, \
+                   CheckBoostDateTime, \
+                   CheckBoostFilesystem, \
+                   CheckBoostInterprocess, \
                    _check_dict
 
 from .python import CheckPython, \

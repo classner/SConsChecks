@@ -10,6 +10,9 @@ configuration options for it. It works with Python 2 and 3 and is tested on Wind
 Every library has an assigned library id string. Currently, checks are
 implemented for:
 
+- 'boost.datetime'
+- 'boost.filesystem'
+- 'boost.interprocess'
 - 'boost.numpy',
 - 'boost.preprocessor',
 - 'boost.python',

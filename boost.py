@@ -138,7 +138,7 @@ int main()
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs([boost_python_lib+'-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
                      context.checkLibs([boost_python_lib+'-%s-mt-%s' % \
                        (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
         result = (
@@ -236,7 +236,7 @@ int main()
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs(['boost_serialization-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file) or \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file) or \
                      context.checkLibs(['boost_serialization-%s-mt-%s' % \
                        (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
         result = (
@@ -283,7 +283,7 @@ BOOST_AUTO_TEST_CASE( my_test )
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs(['boost_unit_test_framework-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
         result = (
             nt_try or
             context.checkLibs([''], boost_source_file) or # icl support
@@ -333,7 +333,7 @@ int main()
             # Lost here, since Boost is built with compiler and version
             # suffix in that case. If it's not set, give up.
             nt_try = context.checkLibs(['boost_thread-%s-%s' % \
-			           (GetOption('boost_comp'), GetOption('boost_ver')),
+                       (GetOption('boost_comp'), GetOption('boost_ver')),
                        'boost_system-%s-%s' %\
                        (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
                      context.checkLibs(['boost_thread-%s-mt-%s' % \
@@ -359,6 +359,156 @@ int main()
     return True
 _check_dict['boost.thread'] = {'options': _boost_option_dict,
                                 'checks': [CheckBoostThread]}
+                                
+def CheckBoostDateTime(context):
+    boost_source_file = r"""
+// Get diagnostics in the log.
+#define BOOST_LIB_DIAGNOSTIC
+#include <boost/date_time/gregorian/gregorian.hpp>
+
+int
+main() 
+{
+  using namespace boost::gregorian;
+  std::string s = "2014-02-19";
+  date birthday(from_simple_string(s));
+  date today = day_clock::local_day();
+  days days_alive = today - birthday;
+  return 0;
+}
+"""
+    context.Message('Check building against Boost.DateTime... ')
+    _set_boost_path(context)
+    if context.env['CC'] == 'cl':
+        # Use msvc's autolinking support.
+        result = (context.checkLibs([''], boost_source_file))
+    else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_date_time-%s-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs(['boost_date_time-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
+        result = (
+            nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
+            context.checkLibs(['boost_date_time'], boost_source_file) or
+            context.checkLibs(['boost_date_time-mt'], boost_source_file)
+            )
+    if not result:
+        context.Result(0)
+        print("Cannot build against Boost.DateTime.")
+        return False
+    result, output = context.TryRun(boost_source_file, '.cpp')
+    if not result:
+        context.Result(0)
+        print("Cannot run program built against Boost.DateTime.")
+        return False
+    context.Result(1)
+    return True
+_check_dict['boost.datetime'] = {'options': _boost_option_dict,
+                                'checks': [CheckBoostDateTime]}
+
+def CheckBoostFilesystem(context):
+    boost_source_file = r"""
+// Get diagnostics in the log.
+#define BOOST_LIB_DIAGNOSTIC
+#include <boost/filesystem.hpp>
+
+using namespace std;
+using namespace boost::filesystem;
+
+int main(int argc, char* argv[])
+{
+  path p (".");
+
+  if (! (exists(p) && is_directory(p)))
+      return 1;
+  return 0;
+}
+"""
+    context.Message('Check building against Boost.Filesystem... ')
+    _set_boost_path(context)
+    if context.env['CC'] == 'cl':
+        # Use msvc's autolinking support.
+        result = (context.checkLibs([''], boost_source_file))
+    else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_filesystem-%s-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs(['boost_filesystem-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
+        result = (
+            nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
+            context.checkLibs(['boost_filesystem'], boost_source_file) or
+            context.checkLibs(['boost_filesystem-mt'], boost_source_file)
+            )
+    if not result:
+        context.Result(0)
+        print("Cannot build against Boost.Filesystem.")
+        return False
+    result, output = context.TryRun(boost_source_file, '.cpp')
+    if not result:
+        context.Result(0)
+        print("Cannot run program built against Boost.Filesystem.")
+        return False
+    context.Result(1)
+    return True
+_check_dict['boost.filesystem'] = {'options': _boost_option_dict,
+                                   'checks': [CheckBoostFilesystem]}
+
+def CheckBoostInterprocess(context):
+    boost_source_file = r"""
+// Get diagnostics in the log.
+#define BOOST_LIB_DIAGNOSTIC
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <cstdlib> //std::system
+
+int main (int argc, char *argv[])
+{
+   using namespace boost::interprocess;
+      //Remove shared memory on construction and destruction
+      struct shm_remove
+      {
+         shm_remove() {  shared_memory_object::remove("MySharedMemory"); }
+         ~shm_remove(){  shared_memory_object::remove("MySharedMemory"); }
+      } remover;
+
+      //Create a managed shared memory segment
+      managed_shared_memory segment(create_only, "MySharedMemory", 65536);
+
+      //Allocate a portion of the segment (raw memory)
+      managed_shared_memory::size_type free_memory = segment.get_free_memory();
+      void * shptr = segment.allocate(1024/*bytes to allocate*/);
+
+      //Check invariant
+      if(free_memory <= segment.get_free_memory())
+         return 1;
+   return 0;
+}
+"""
+    context.Message('Check building against Boost.Interprocess... ')
+    _set_boost_path(context)
+    result = (context.checkLibs([''], boost_source_file))
+    if not result:
+        context.Result(0)
+        print("Cannot build against Boost.Interprocess.")
+        return False
+    result, output = context.TryRun(boost_source_file, '.cpp')
+    if not result:
+        context.Result(0)
+        print("Cannot run program built against Boost.Interprocess.")
+        return False
+    context.Result(1)
+    return True
+_check_dict['boost.interprocess'] = {'options': _boost_option_dict,
+                                     'checks': [CheckBoostInterprocess]}
 
 def CheckBoostPP(context):
     boost_source_file = r"""
