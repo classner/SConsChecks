@@ -418,7 +418,6 @@ def CheckBoostSystem(context):
 #include <boost/system/system_error.hpp>
 
 using namespace std;
-using namespace boost::filesystem;
 
 int main(int argc, char* argv[])
 {
