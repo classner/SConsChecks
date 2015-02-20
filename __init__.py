@@ -22,6 +22,7 @@ from .boost import CheckBoostNumpy, \
                    CheckBoostDateTime, \
                    CheckBoostFilesystem, \
                    CheckBoostInterprocess, \
+                   CheckBoostSystem, \
                    _check_dict
 
 from .python import CheckPython, \

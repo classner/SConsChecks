@@ -411,6 +411,57 @@ main()
 _check_dict['boost.datetime'] = {'options': _boost_option_dict,
                                 'checks': [CheckBoostDateTime]}
 
+def CheckBoostSystem(context):
+    boost_source_file = r"""
+// Get diagnostics in the log.
+#define BOOST_LIB_DIAGNOSTIC
+#include <boost/system/system_error.hpp>
+
+using namespace std;
+using namespace boost::filesystem;
+
+int main(int argc, char* argv[])
+{
+  int err_code = errno;
+  boost::system::error_code ec (err_code,
+    boost::system::system_category ());
+  return 0;
+}
+"""
+    context.Message('Check building against Boost.System... ')
+    _set_boost_path(context)
+    if context.env['CC'] == 'cl':
+        # Use msvc's autolinking support.
+        result = (context.checkLibs([''], boost_source_file))
+    else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_system-%s-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file) or \
+                     context.checkLibs(['boost_system-%s-mt-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], bp_source_file)
+        result = (
+            nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
+            context.checkLibs(['boost_system'], boost_source_file) or
+            context.checkLibs(['boost_system-mt'], boost_source_file)
+            )
+    if not result:
+        context.Result(0)
+        print("Cannot build against Boost.System.")
+        return False
+    result, output = context.TryRun(boost_source_file, '.cpp')
+    if not result:
+        context.Result(0)
+        print("Cannot run program built against Boost.System.")
+        return False
+    context.Result(1)
+    return True
+_check_dict['boost.system'] = {'options': _boost_option_dict,
+                               'checks': [CheckBoostSystem]}
+
 def CheckBoostFilesystem(context):
     boost_source_file = r"""
 // Get diagnostics in the log.
@@ -461,7 +512,7 @@ int main(int argc, char* argv[])
     context.Result(1)
     return True
 _check_dict['boost.filesystem'] = {'options': _boost_option_dict,
-                                   'checks': [CheckBoostFilesystem]}
+                                   'checks': [CheckBoostSystem, CheckBoostFilesystem]}
 
 def CheckBoostInterprocess(context):
     boost_source_file = r"""

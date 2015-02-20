@@ -17,6 +17,7 @@ implemented for:
 - 'boost.preprocessor',
 - 'boost.python',
 - 'boost.serialization',
+- 'boost.system',
 - 'boost.test',
 - 'boost.thread',
 - 'python',
