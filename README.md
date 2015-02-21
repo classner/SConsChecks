@@ -20,13 +20,15 @@ implemented for:
 - 'boost.system',
 - 'boost.test',
 - 'boost.thread',
-- 'python',
-- 'numpy',
-- 'opencv',
 - 'eigen',
 - 'fftw',
-- 'swig',
-- 'matlab'.
+- 'hdf5',
+- 'matlab',
+- 'openblas'
+- 'numpy',
+- 'opencv',
+- 'python',
+- 'swig'.
 
 You can either:
 

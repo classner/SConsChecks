@@ -545,7 +545,10 @@ int main (int argc, char *argv[])
 """
     context.Message('Check building against Boost.Interprocess... ')
     _set_boost_path(context)
-    result = (context.checkLibs([''], boost_source_file))
+    if os.name == 'nt':
+        result = (context.checkLibs([], boost_source_file))
+    else:
+        result = (context.checkLibs(['rt', 'pthread'], boost_source_file))
     if not result:
         context.Result(0)
         print("Cannot build against Boost.Interprocess.")
