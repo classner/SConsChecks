@@ -93,9 +93,9 @@ int main() {
         lib_add_dir = lib_add_dir
         )
     if os.name == 'nt':
-		libnames = ['libmx.lib', 'libmat.lib', 'libmex.lib']
-	else:
-		libnames = ['mx', 'mat', 'mex']
+        libnames = ['libmx.lib', 'libmat.lib', 'libmex.lib']
+    else:
+        libnames = ['mx', 'mat', 'mex']
     result = context.checkLibs(libnames, matlab_source_file)
     if not result:
         context.Result(0)
@@ -105,7 +105,8 @@ int main() {
     if not result:
         context.Result(0)
         print("Cannot run program built with MATLAB. " +\
-              "Is the MATLAB bin folder on your PATH/LD_LIBRARY_PATH?")
+              "Is the MATLAB bin/win64 (Windows) or bin/glnxa64 (Linux) " +\
+              "folder on your PATH/LD_LIBRARY_PATH?")
         return False
     context.Result(1)
     return True
