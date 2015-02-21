@@ -70,7 +70,21 @@ int main() {
     if os.name == 'nt':
         lib_add_dir = r'extern\lib\win64\microsoft'
     else:
-        lib_add_dir = 'extern/lib'
+        # On Linux, link directly.
+        lib_add_dir = 'bin/glnxa64'
+    # It's important to set the rpath in that case. Thanks to
+    # Jun Xie for reporting that!
+    if not matlab_ex_lib is None and not matlab_ex_lib == '':
+        if not matlab_root is None and not matlab_root == '':
+            lib_foldername = os.path.join(matlab_root, matlab_ex_lib)
+        else:
+            lib_foldername = matlab_ex_lib
+    else:
+        if matlab_root is None or matlab_root == '':
+            raise Exception("Please specify the MATLAB root folder!")
+        else:
+            lib_foldername = os.path.join(matlab_root, lib_add_dir)
+    context.env.AppendUnique(LINKFLAGS=['-Wl,-rpath-link,%s'%(lib_foldername)])
     _setupPaths(context.env,
         prefix = matlab_root,
         include = matlab_ex_inc,
@@ -78,9 +92,11 @@ int main() {
         include_add_dir = os.path.join('extern', 'include'),
         lib_add_dir = lib_add_dir
         )
-    result = context.checkLibs(['libmx.lib',
-                                'libmat.lib',
-                                'libmex.lib'], matlab_source_file)
+    if os.name == 'nt':
+		libnames = ['libmx.lib', 'libmat.lib', 'libmex.lib']
+	else:
+		libnames = ['mx', 'mat', 'mex']
+    result = context.checkLibs(libnames, matlab_source_file)
     if not result:
         context.Result(0)
         print("Cannot build with MATLAB.")
@@ -88,7 +104,8 @@ int main() {
     result, output = context.TryRun(matlab_source_file, '.cpp')
     if not result:
         context.Result(0)
-        print("Cannot run program built with MATLAB.")
+        print("Cannot run program built with MATLAB. " +\
+              "Is the MATLAB bin folder on your PATH/LD_LIBRARY_PATH?")
         return False
     context.Result(1)
     return True
