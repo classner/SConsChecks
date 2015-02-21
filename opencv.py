@@ -67,10 +67,12 @@ int main()
         include = context.env.GetOption("opencv_include"),
         lib = context.env.GetOption("opencv_lib")
         )
-    if context.env.GetOption("debug_checks"):
-      libsuffix = 'd'
-    else:
-      libsuffix = ''
+    libsuffix = ''
+    try:
+        if context.env.GetOption("debug_checks"):
+          libsuffix = 'd'
+    except:
+        pass
     if platform.system() == 'Windows':
         result = (context.checkLibs(['opencv_imgproc' + context.env.GetOption("opencv_version") + libsuffix,
                                      'opencv_highgui' + context.env.GetOption("opencv_version") + libsuffix,

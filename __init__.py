@@ -54,7 +54,7 @@ from .openblas import CheckOpenBLAS, \
                    _check_dict as _openblas_check_dict
 _check_dict = dict(_check_dict, **_openblas_check_dict)
 
-fromo .hdf5 import CheckHDF5, \
+from .hdf5 import CheckHDF5, \
                    _check_dict as _hdf5_check_dict
 _check_dict = dict(_check_dict, **_hdf5_check_dict)
 

@@ -15,7 +15,7 @@ from SCons.SConf import CheckContext
 CheckContext.checkLibs = _checkLibs
 
 _check_dict = {}
-_openblas_option_dict = {'--hdf5-dir':
+_hdf5_option_dict = {'--hdf5-dir':
                        {'dest':"hdf5_prefix",
                        'type':"string",
                        'nargs':1,
@@ -23,7 +23,7 @@ _openblas_option_dict = {'--hdf5-dir':
                        'metavar':"DIR",
                        'default':os.environ.get("HDF5_ROOT"),
                        'help':"prefix for HDF5; should contain the 'bin', 'include', and 'lib' folders."},
-                       '--openblas-inc-dir':
+                       '--hdf5-inc-dir':
                        {'dest':"hdf5_include",
                        'type':"string",
                        'nargs':1,
@@ -45,13 +45,14 @@ def CheckHDF5(context):
 #include <iostream>
 #include <string>
 
-#include "H5Cpp.h"
+#include <hdf5.h>
+#include <H5Cpp.h>
 
 int main (void) {
     hsize_t dims[2];
     dims[0] = 5;
     dims[1] = 5;
-    DataSpace dataspace(2, dims);
+    H5::DataSpace dataspace(2, dims);
     return 0;
 }
 """
@@ -60,11 +61,13 @@ int main (void) {
     ex_lib_dir = context.env.GetOption("hdf5_lib")
     ex_include_dir = context.env.GetOption("hdf5_include")
     _setupPaths(context.env,
-                prefix = ex_prefix,
+                prefix = ex_prefix_dir,
                 include = ex_include_dir,
                 lib = ex_lib_dir
                 )
-    result = (context.checkLibs(['hdf5'], sample_source_file))
+    result = (context.checkLibs(['hdf5', 'hdf5_cpp',
+                                 'hdf5_hl', 'hdf5_hl_cpp'],
+              sample_source_file))
     if not result:
         context.Result(0)
         print("Cannot build with HDF5.")

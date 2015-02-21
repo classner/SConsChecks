@@ -68,9 +68,9 @@ int main(int argc, char** argv)
     context.Message('Check building with OpenBLAS... ')
     ex_prefix_dir = context.env.GetOption("openblas_prefix")
     ex_lib_dir = context.env.GetOption("openblas_lib")
-    ex_include_dir = context.env.GetOption("eigen_include")
+    ex_include_dir = context.env.GetOption("openblas_include")
     _setupPaths(context.env,
-                prefix = ex_prefix,
+                prefix = ex_prefix_dir,
                 include = ex_include_dir,
                 lib = ex_lib_dir
                 )
