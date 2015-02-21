@@ -84,7 +84,8 @@ int main() {
             raise Exception("Please specify the MATLAB root folder!")
         else:
             lib_foldername = os.path.join(matlab_root, lib_add_dir)
-    context.env.AppendUnique(LINKFLAGS=['-Wl,-rpath-link,%s'%(lib_foldername)])
+    if os.name != 'nt':
+        context.env.AppendUnique(LINKFLAGS=['-Wl,-rpath-link,%s'%(lib_foldername)])
     _setupPaths(context.env,
         prefix = matlab_root,
         include = matlab_ex_inc,
