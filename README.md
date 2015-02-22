@@ -20,6 +20,7 @@ implemented for:
 - 'boost.system',
 - 'boost.test',
 - 'boost.thread',
+- 'cuda',
 - 'eigen',
 - 'fftw',
 - 'hdf5',

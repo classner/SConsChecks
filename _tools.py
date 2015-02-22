@@ -29,10 +29,10 @@ def _setupPaths(env,
     if lib:
         env.PrependUnique(LIBPATH=[lib])
 
-def _checkLibs(context, try_libs, source_file):
+def _checkLibs(context, try_libs, source_file, file_ending='.cpp'):
     init_libs = context.env.get('LIBS', [])
     context.env.PrependUnique(LIBS=[try_libs])
-    result = context.TryLink(source_file, '.cpp')
+    result = context.TryLink(source_file, file_ending)
     if not result :
         context.env.Replace(LIBS=init_libs)
     return result
