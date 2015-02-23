@@ -22,7 +22,7 @@ _cuda_option_dict  = {'--cuda-dir':
                        'action':"store",
                        'metavar':"DIR",
                        'default':os.environ.get("CUDA_ROOT"),
-                       'help':"prefix for cuda; should contain the	 'bin', 'include', and 'lib' folders."},
+                       'help':"prefix for cuda; should contain the   'bin', 'include', and 'lib' folders."},
                        '--cuda-inc-dir':
                        {'dest':"cuda_include",
                        'type':"string",
@@ -58,33 +58,33 @@ def CheckCUDA(context):
  
 __global__
 void add(int *a, int *b, int *c ) {
-	*c = *a + *b;
+    *c = *a + *b;
 }
  
 int main( void ) {
-	int a, b, c;
-	// host copies of a, b, c
-	int *dev_a, *dev_b, *dev_c;
-	// device copies of a, b, c
-	int size = sizeof(int);
-	// we need space for an integer
-	// allocate device copies of a, b, c
-	cudaMalloc( (void**)&dev_a, size );
-	cudaMalloc( (void**)&dev_b, size );
-	cudaMalloc( (void**)&dev_c, size );
-	a = 2;
-	b = 7;
-	// copy inputs to device
-	cudaMemcpy(dev_a, &a, size, cudaMemcpyHostToDevice);
-	cudaMemcpy(dev_b, &b, size, cudaMemcpyHostToDevice);
-	// launch add() kernel on GPU, passing parameters
-	add<<< 1, 1 >>>(dev_a,dev_b,dev_c);
-	// copy device result back to host copy of c
-	cudaMemcpy( &c,dev_c, size,cudaMemcpyDeviceToHost);
-	cudaFree(dev_a);
-	cudaFree(dev_b);
-	cudaFree(dev_c);
-	return 0;
+    int a, b, c;
+    // host copies of a, b, c
+    int *dev_a, *dev_b, *dev_c;
+    // device copies of a, b, c
+    int size = sizeof(int);
+    // we need space for an integer
+    // allocate device copies of a, b, c
+    cudaMalloc( (void**)&dev_a, size );
+    cudaMalloc( (void**)&dev_b, size );
+    cudaMalloc( (void**)&dev_c, size );
+    a = 2;
+    b = 7;
+    // copy inputs to device
+    cudaMemcpy(dev_a, &a, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_b, &b, size, cudaMemcpyHostToDevice);
+    // launch add() kernel on GPU, passing parameters
+    add<<< 1, 1 >>>(dev_a,dev_b,dev_c);
+    // copy device result back to host copy of c
+    cudaMemcpy( &c,dev_c, size,cudaMemcpyDeviceToHost);
+    cudaFree(dev_a);
+    cudaFree(dev_b);
+    cudaFree(dev_c);
+    return 0;
 }
 """
     ex_prefix_dir = context.env.GetOption("cuda_prefix")
@@ -101,6 +101,8 @@ int main( void ) {
                 lib = ex_lib_dir,
                 lib_add_dir = lib_add_dir
                 )
+    defines_saved = context.env['CPPDEFINES']
+    context.env['CPPDEFINES'] = ''
     result_bld = (context.checkLibs(['cudart', 'cublas', 'cublas_device',
                                      'cufft', 'cufftw', 'curand'],
                                      sample_source_file,
@@ -112,6 +114,7 @@ int main( void ) {
     result, output = context.TryRun(sample_source_file, '.cu')
     if not result:
         print("Warning: cannot run program built with CUDA. Continuing anyway.")
+    context.env['CPPDEFINES'] = defines_saved
     context.Result(1)
     return True
 _check_dict['cuda'] = {'options': _cuda_option_dict,

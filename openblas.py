@@ -74,7 +74,10 @@ int main(int argc, char** argv)
                 include = ex_include_dir,
                 lib = ex_lib_dir
                 )
-    result = (context.checkLibs(['openblas'], sample_source_file))
+    if os.name == 'nt':
+        result = (context.checkLibs(['libopenblas.dll.a'], sample_source_file))
+    else:
+        result = (context.checkLibs(['openblas'], sample_source_file))
     if not result:
         context.Result(0)
         print("Cannot build with OpenBLAS.")
