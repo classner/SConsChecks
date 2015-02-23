@@ -7,6 +7,7 @@
 
 from __future__ import print_function
 import os
+import sys
 
 from ._tools import _checkLibs, _setupPaths
 
@@ -86,17 +87,21 @@ int main( void ) {
 	return 0;
 }
 """
-    context.Message('Check building with CUDA... ')
     ex_prefix_dir = context.env.GetOption("cuda_prefix")
     ex_lib_dir = context.env.GetOption("cuda_lib")
     ex_include_dir = context.env.GetOption("cuda_include")
+    is_64bits = sys.maxsize > 2**32
+    if is_64bits:
+        lib_add_dir = 'lib64'
+    else:
+        lib_add_dir = 'lib'
     _setupPaths(context.env,
                 prefix = ex_prefix_dir,
                 include = ex_include_dir,
-                lib = ex_lib_dir
+                lib = ex_lib_dir,
+                lib_add_dir = lib_add_dir
                 )
-    context.env.Tool('nvcc')
-    result_bld = (context.checkLibs(['cublas', 'cublas_device',
+    result_bld = (context.checkLibs(['cudart', 'cublas', 'cublas_device',
                                      'cufft', 'cufftw', 'curand'],
                                      sample_source_file,
                                      '.cu'))
@@ -109,5 +114,5 @@ int main( void ) {
         print("Warning: cannot run program built with CUDA. Continuing anyway.")
     context.Result(1)
     return True
-_check_dict['cuda'] = {'options': {},
+_check_dict['cuda'] = {'options': _cuda_option_dict,
                        'checks': [CheckCUDA]}
