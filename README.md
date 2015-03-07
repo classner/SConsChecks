@@ -29,6 +29,7 @@ implemented for:
 - 'numpy',
 - 'opencv',
 - 'python',
+- 'protobuf',
 - 'swig'.
 
 You can either:

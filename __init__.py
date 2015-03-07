@@ -62,6 +62,10 @@ from .cuda import CheckCUDA, \
                    _check_dict as _cuda_check_dict
 _check_dict = dict(_check_dict, **_cuda_check_dict)
 
+from .protobuf import CheckProtobuf, \
+                   _check_dict as _protobuf_check_dict
+_check_dict = dict(_check_dict, **_protobuf_check_dict)
+
 def AddLibOptions(add_method, lib_names):
   r"""
   Provide the `AddOption` method for your enviromnent, and all command line
