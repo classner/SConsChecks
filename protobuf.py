@@ -31,8 +31,8 @@ _protobuf_option_dict = {'--protobuf-dir':
 
 def CheckProtobuf(context):
     context.Message('Check that protoc is available... ')
-    if not GetOption("protoc") is None:
-        result = os.path_isfile(GetOption("protoc"))
+    if not context.env.GetOption("protoc") is None:
+        result = os.path.isfile(context.env.GetOption("protoc"))
     else:
         if os.name != 'nt':
             result = not subprocess.call(['which', 'protoc'])
@@ -50,8 +50,13 @@ def CheckProtobuf(context):
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
+
+int main() {
+  return 0;
+}
 """
-    context.env.PrependUnique(CPPPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'src')])
+    if not context.env.GetOption("protobuf_prefix") is None:
+        context.env.PrependUnique(CPPPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'src')])
     result = context.checkLibs([], source_file)
     if not result:
         context.Result(0)
