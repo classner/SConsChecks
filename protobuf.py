@@ -57,9 +57,9 @@ int main() {
 """
     if not context.env.GetOption("protobuf_prefix") is None:
         context.env.PrependUnique(CPPPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'src')])
-		if os.name == 'nt':
-			context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Release')])
-    result = context.checkLibs(['protobuf'], source_file)
+        if os.name == 'nt':
+            context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Release')])
+    result = context.checkLibs(['libprotobuf'], source_file)
     if not result:
         context.Result(0)
         print("Cannot build with PROTOBUF headers.")
