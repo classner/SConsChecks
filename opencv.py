@@ -80,12 +80,16 @@ int main()
     else:
         result = (context.checkLibs(['opencv_imgproc' + libsuffix,
                                      'opencv_highgui' + libsuffix,
-                                     'opencv_core' + libsuffix], opencv_source_file))
+                                     'opencv_core' + libsuffix,
+                                     'tiff',
+                                     'freetype'], opencv_source_file))
         if not result:
-            # It not common on Linux to have the 'd' suffix for debugging.
+            # Its not common on Linux to have the 'd' suffix for debugging.
             result = (context.checkLibs(['opencv_imgproc',
                                          'opencv_highgui',
-                                         'opencv_core'], opencv_source_file))
+                                         'opencv_core',
+                                         'tiff',
+                                         'freetype'], opencv_source_file))
     if not result:
         context.Result(0)
         print("Cannot build against OpenCV.")
@@ -99,3 +103,4 @@ int main()
     return True
 _check_dict['opencv'] = {'options': _opencv_option_dict,
                          'checks': [CheckOpenCV]}
+
