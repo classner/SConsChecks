@@ -58,7 +58,14 @@ int main() {
     if not context.env.GetOption("protobuf_prefix") is None:
         context.env.PrependUnique(CPPPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'src')])
         if os.name == 'nt':
-            context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Release')])
+            try:
+                debug_build = context.env.GetOption("debug_build")
+            except:
+                debug_build = False
+            if debug_build:
+                context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Debug')])
+            else:
+                context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Release')])
     result = context.checkLibs(['libprotobuf'], source_file)
     if not result:
         context.Result(0)
