@@ -259,50 +259,6 @@ int main()
 _check_dict['boost.serialization'] = {'options': _boost_option_dict,
                                       'checks': [CheckBoostSerialization]}
 
-def CheckBoostTest(context):
-    boost_source_file = r"""
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE "dummy module"
-#include <boost/test/unit_test.hpp>
-
-BOOST_AUTO_TEST_CASE( my_test )
-{
-    BOOST_REQUIRE( 1+1==2 );
-}
-"""
-    context.Message('Check building against Boost.Test... ')
-    _set_boost_path(context)
-    if context.env['CC'] == 'cl':
-        context.env.AppendUnique(LINKFLAGS='/SUBSYSTEM:CONSOLE')
-        # Use msvc's autolinking support.
-        result = (context.checkLibs([''], boost_source_file))
-    else:
-        nt_try = False
-        if os.name == 'nt':
-            # Lost here, since Boost is built with compiler and version
-            # suffix in that case. If it's not set, give up.
-            nt_try = context.checkLibs(['boost_unit_test_framework-%s-%s' % \
-                       (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
-        result = (
-            nt_try or
-            context.checkLibs([''], boost_source_file) or # icl support
-            context.checkLibs(['boost_unit_test_framework'], boost_source_file)
-            )
-    if not result:
-        context.Result(0)
-        print("Cannot build against Boost.Test.")
-        return False
-    result, output = context.TryRun(boost_source_file, '.cpp')
-    if not result:
-        context.Result(0)
-        print("Cannot run program built against Boost.Test.")
-        return False
-    context.Result(1)
-    return True
-_check_dict['boost.test'] = {'options': _boost_option_dict,
-                             'checks': [CheckBoostTest]}
-
 def CheckBoostThread(context):
     boost_source_file = r"""
 // Get diagnostics in the log.
@@ -460,6 +416,50 @@ int main(int argc, char* argv[])
     return True
 _check_dict['boost.system'] = {'options': _boost_option_dict,
                                'checks': [CheckBoostSystem]}
+
+def CheckBoostTest(context):
+    boost_source_file = r"""
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MAIN
+#define BOOST_TEST_MODULE "dummy module"
+#include <boost/test/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE( my_test )
+{
+    BOOST_REQUIRE( 1+1==2 );
+}
+"""
+    context.Message('Check building against Boost.Test... ')
+    _set_boost_path(context)
+    if context.env['CC'] == 'cl':
+        context.env.AppendUnique(LINKFLAGS='/SUBSYSTEM:CONSOLE')
+        # Use msvc's autolinking support.
+        result = (context.checkLibs([''], boost_source_file))
+    else:
+        nt_try = False
+        if os.name == 'nt':
+            # Lost here, since Boost is built with compiler and version
+            # suffix in that case. If it's not set, give up.
+            nt_try = context.checkLibs(['boost_unit_test_framework-%s-%s' % \
+                       (GetOption('boost_comp'), GetOption('boost_ver'))], boost_source_file)
+        result = (
+            nt_try or
+            context.checkLibs([''], boost_source_file) or # icl support
+            context.checkLibs(['boost_unit_test_framework'], boost_source_file)
+            )
+    if not result:
+        context.Result(0)
+        print("Cannot build against Boost.Test.")
+        return False
+    result, output = context.TryRun(boost_source_file, '.cpp')
+    if not result:
+        context.Result(0)
+        print("Cannot run program built against Boost.Test.")
+        return False
+    context.Result(1)
+    return True
+_check_dict['boost.test'] = {'options': _boost_option_dict,
+                             'checks': [CheckBoostSystem, CheckBoostTest]}
 
 def CheckBoostFilesystem(context):
     boost_source_file = r"""
