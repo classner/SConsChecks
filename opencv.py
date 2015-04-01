@@ -12,6 +12,7 @@
 from __future__ import print_function
 import platform
 import os
+import sys
 
 from ._tools import _checkLibs, _setupPaths
 from SCons.SConf import CheckContext
@@ -74,6 +75,14 @@ int main()
     except:
         pass
     if platform.system() == 'Windows':
+        if context.env.GetOption('opencv_version') is None:
+            print("Please specify the OpenCV version using the " +\
+                  "environment variable OPENCV_VERSION or using " +\
+                  "the parameter --opencv-version as the number that " +\
+                  "is attached to the library files, e.g., 2411 for "+\
+                  "version 2.4.11.")
+            context.Result(0)
+            return False
         result = (context.checkLibs(['opencv_imgproc' + context.env.GetOption("opencv_version") + libsuffix,
                                      'opencv_highgui' + context.env.GetOption("opencv_version") + libsuffix,
                                      'opencv_core' + context.env.GetOption("opencv_version") + libsuffix], opencv_source_file))
