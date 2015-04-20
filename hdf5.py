@@ -65,8 +65,7 @@ int main (void) {
                 include = ex_include_dir,
                 lib = ex_lib_dir
                 )
-    result = (context.checkLibs(['hdf5', 'hdf5_cpp',
-                                 'hdf5_hl', 'hdf5_hl_cpp'],
+    result = (context.checkLibs(['hdf5_cpp', 'hdf5_hl_cpp', 'hdf5_hl', 'hdf5'],
               sample_source_file))
     if not result:
         context.Result(0)
