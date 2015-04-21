@@ -31,7 +31,7 @@ _protobuf_option_dict = {'--protobuf-dir':
 
 def CheckProtobuf(context):
     context.Message('Check that protoc is available... ')
-    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX'])
+    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX']))
     if not context.env.GetOption("protoc") is None:
         result = os.path.isfile(context.env.GetOption("protoc"))
     else:
@@ -44,7 +44,7 @@ def CheckProtobuf(context):
         print("Cannot find protoc!")
         return False
     context.Message('Check that protobuf header files are available...')
-    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX'])
+    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX']))
     source_file = r"""
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message.h>
@@ -74,7 +74,7 @@ int main() {
         print("Cannot build with PROTOBUF headers.")
         return False
     context.Result(1)
-    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX'])
+    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX']))
     return True
 _check_dict['protobuf'] = {'options': _protobuf_option_dict,
                            'checks': [CheckProtobuf]}
