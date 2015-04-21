@@ -334,6 +334,7 @@ main()
 }
 """
     context.Message('Check building against Boost.DateTime... ')
+    print("env['CC']: %s, env['CXX']: %s" % (context.env['CC'], context.env['CXX'])
     _set_boost_path(context)
     if context.env['CC'] == 'cl':
         # Use msvc's autolinking support.
