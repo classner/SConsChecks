@@ -74,15 +74,15 @@ int main() {
 """
     ex_prefix_dir = context.env.GetOption("protobuf_prefix")
     ex_lib_dir = context.env.GetOption("protobuf_lib_dir")
-    if not context.env.GetOption("protobuf_prefix") is None and (ex_lib_dir is None or ex_lib_dir == "") and os.name == 'nt':
     try:
         debug_build = context.env.GetOption("debug_build")
     except:
         debug_build = False
-    if debug_build:
-        ex_lib_dir = os.path.join('vsprojects', 'x64', 'Debug')
-    else:
-        ex_lib_dir = os.path.join('vsprojects', 'x64', 'Release')])
+	if ex_lib_dir is None or ex_lib_dir == '':
+		if debug_build:
+			ex_lib_dir = os.path.join('vsprojects', 'x64', 'Debug')
+		else:
+			ex_lib_dir = os.path.join('vsprojects', 'x64', 'Release')
     ex_include_dir = context.env.GetOption("protobuf_include_dir")
     _setupPaths(context.env,
                 prefix = ex_prefix_dir,
