@@ -20,6 +20,22 @@ _protobuf_option_dict = {'--protobuf-dir':
                            'metavar':"DIR",
                            'default':os.environ.get("PROTOBUF_ROOT"),
                            'help':"prefix for protobuf; should contain the 'src' folder."},
+			'--protobuf-include-dir':
+                           {'dest':"protobuf_include_dir",
+                           'type':"string",
+                           'nargs':1,
+                           'action':"store",
+                           'metavar':"DIR",
+                           'default':os.environ.get("PROTOBUF_INCLUDE_DIR"),
+                           'help':"the relative (to protobuf root) or absolute include path"},
+			'--protobuf-lib-dir':
+                           {'dest':"protobuf_lib_dir",
+                           'type':"string",
+                           'nargs':1,
+                           'action':"store",
+                           'metavar':"DIR",
+                           'default':os.environ.get("PROTOBUF_LIB_DIR"),
+                           'help':"the relative (to protobuf root) or absolute library path"},
                            '--protoc':
                            {'dest':"protoc",
                            'type':"string",
@@ -56,17 +72,23 @@ int main() {
   return 0;
 }
 """
-    if not context.env.GetOption("protobuf_prefix") is None:
-        context.env.PrependUnique(CPPPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'src')])
-        if os.name == 'nt':
-            try:
-                debug_build = context.env.GetOption("debug_build")
-            except:
-                debug_build = False
-            if debug_build:
-                context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Debug')])
-            else:
-                context.env.PrependUnique(LIBPATH=[os.path.join(context.env.GetOption("protobuf_prefix"), 'vsprojects', 'x64', 'Release')])
+    ex_prefix_dir = context.env.GetOption("protobuf_prefix")
+    ex_lib_dir = context.env.GetOption("protobuf_lib_dir")
+    if not context.env.GetOption("protobuf_prefix") is None and (ex_lib_dir is None or ex_lib_dir == "") and os.name == 'nt':
+    try:
+        debug_build = context.env.GetOption("debug_build")
+    except:
+        debug_build = False
+    if debug_build:
+        ex_lib_dir = os.path.join('vsprojects', 'x64', 'Debug')
+    else:
+        ex_lib_dir = os.path.join('vsprojects', 'x64', 'Release')])
+    ex_include_dir = context.env.GetOption("protobuf_include_dir")
+    _setupPaths(context.env,
+                prefix = ex_prefix_dir,
+                include = ex_include_dir,
+                lib = ex_lib_dir
+                )
     result = context.checkLibs(['libprotobuf'], source_file)
     if not result:
         context.Result(0)
