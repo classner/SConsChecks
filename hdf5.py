@@ -60,6 +60,12 @@ int main (void) {
     ex_prefix_dir = context.env.GetOption("hdf5_prefix")
     ex_lib_dir = context.env.GetOption("hdf5_lib")
     ex_include_dir = context.env.GetOption("hdf5_include")
+    if ex_prefix_dir is None and ex_lib_dir is None:
+        if os.path.exists('/usr/lib/x86_64-linux-gnu/hdf5/serial'):
+            ex_lib_dir = '/usr/lib/x86_64-linux-gnu/hdf5/serial'
+    if ex_prefix_dir is None and ex_include_dir is None:
+        if os.path.exists('/usr/include/hdf5/serial'):
+            ex_include_dir = '/usr/include/hdf5/serial'
     _setupPaths(context.env,
                 prefix = ex_prefix_dir,
                 include = ex_include_dir,
