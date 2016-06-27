@@ -97,9 +97,16 @@ def CheckNumPy(context):
 #undef _DEBUG
 #include "Python.h"
 #include "numpy/arrayobject.h"
+#if PY_MAJOR_VERSION == 2
 void doImport() {
   import_array();
 }
+#else
+void * doImport() {
+  import_array();
+  return nullptr;
+}
+#endif
 int main()
 {
   int result = 0;
